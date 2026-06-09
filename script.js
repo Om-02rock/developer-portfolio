@@ -156,13 +156,39 @@ document.addEventListener('DOMContentLoaded', () => {
             formStatus.className = 'form-status';
             formStatus.textContent = '';
 
-            setTimeout(() => {
+            fetch("https://formsubmit.co/ajax/omnarayangupta98@gmail.com", {
+                method: "POST",
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: nameInput.value,
+                    email: emailInput.value,
+                    subject: subjectInput.value,
+                    message: messageInput.value
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Form submission failed");
+                }
+            })
+            .then(data => {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Send Message';
                 formStatus.className = 'form-status success';
                 formStatus.textContent = 'Thank you! Your message has been sent successfully.';
                 contactForm.reset();
-            }, 1800);
+            })
+            .catch(error => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+                formStatus.className = 'form-status error';
+                formStatus.textContent = 'Oops! There was a problem sending your message. Please try again.';
+            });
         } else {
             formStatus.className = 'form-status error';
             formStatus.textContent = 'Please correct the highlighted errors before submitting.';
